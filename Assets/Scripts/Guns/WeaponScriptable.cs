@@ -23,11 +23,9 @@ public class WeaponScriptable : ScriptableObject
     public ParticleSystem shootingEffect;
     public ParticleSystem bulletHoleEffect;
 
-    [Header("Recoil settings")]
+    [Header("Hipfire recoil (Camera)")]
     public int snappiness;
     public int returnSpeed;
-
-    [Header("Hipfire recoil")]
     public float recoilX;
     public float recoilY;
     public float recoilZ;
@@ -43,6 +41,7 @@ public class WeaponScriptable : ScriptableObject
     public float kickback;
     public float kickbackReturnSpeed;
     public float kickbackSnappiness;
+    public float maxKickback;
 
 
     [Header("VFX")]

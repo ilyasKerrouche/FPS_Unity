@@ -39,4 +39,5 @@ MonoBehaviour:
   kickback: 0.1
   kickbackReturnSpeed: 8
   kickbackSnappiness: 5
-  fireShot: {fileID: 8300000, guid: faee5189353c888409434a0679ec28e9, type: 3}
+  maxKickback: 0
+  fireShot: {fileID: 0}

@@ -45,6 +45,7 @@ public class WeaponData : MonoBehaviour
     private Vector3 currentRecoil;
     private Vector3 targetRecoil;
     private Vector3 kickbackDir;
+    private Vector3 kickbackTarget;
     private Vector3 CurrentKickBack;
     private Vector3 gunPositionDir;
 
@@ -65,6 +66,8 @@ public class WeaponData : MonoBehaviour
         //animator = GetComponent<Animator>();
         cameraTransform = Camera.main.transform;
         ammo = equippedWeapon.ammoCapacity;
+        kickbackDir = Vector3.zero;
+        kickbackTarget = Vector3.zero;
 
     }
 
@@ -268,13 +271,15 @@ public class WeaponData : MonoBehaviour
     private void GetGunRecoilAnimation()
     {
         // Imposta la direzione del rinculo
-        targetRecoil += new Vector3(
-                                    -equippedWeapon.gunRecoilX,  // Recoil verticale (alzare la canna)
+        targetRecoil += new Vector3(-equippedWeapon.gunRecoilX,  // Recoil verticale (alzare la canna)
                         Random.Range(-equippedWeapon.gunRecoilY, equippedWeapon.gunRecoilY),  // Recoil orizzontale casuale
-                                        Random.Range(-equippedWeapon.gunRecoilZ, equippedWeapon.gunRecoilZ) // Nessun recoil lungo Z (per rotazione laterale)
-        );
+                        Random.Range(-equippedWeapon.gunRecoilZ, equippedWeapon.gunRecoilZ));
+
+
 
         kickbackDir += new Vector3(0, 0, -equippedWeapon.kickback);
+        
+
 
 
     }
@@ -294,23 +299,21 @@ public class WeaponData : MonoBehaviour
         //kickback
 
         // Gestisci il ritorno della kickback
-        kickbackDir = Vector3.Slerp(kickbackDir, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackSnappiness);
+        kickbackDir = Vector3.Slerp(kickbackDir, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackReturnSpeed);
+        kickbackTarget = Vector3.Lerp(kickbackTarget, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackReturnSpeed);
+
+
 
         // Sposta l'arma lungo l'asse Z per il kickback
-        transform.localPosition = new Vector3(
-            transform.localPosition.x,
-            transform.localPosition.y,
-            Mathf.Lerp(transform.localPosition.z, kickbackDir.z, Time.deltaTime * equippedWeapon.kickbackSnappiness));
-    
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, kickbackTarget.z);
 
-            Debug.Log(kickbackDir);
-
+        kickbackTarget = Vector3.Lerp(kickbackTarget, kickbackDir, Time.deltaTime * equippedWeapon.kickbackSnappiness);
 
 
     }
 
 
-        public void Reload()
+    public void Reload()
     {
         ammo = equippedWeapon.ammoCapacity;
     }
