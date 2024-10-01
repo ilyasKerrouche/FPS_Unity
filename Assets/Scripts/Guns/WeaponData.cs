@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
 using Unity.VisualScripting;
@@ -10,6 +11,8 @@ public class WeaponData : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI ammoMagazine;
     [SerializeField] private TextMeshProUGUI damageUI;
+
+    [SerializeField] private List<WeaponData> weapons;
 
     [Header("Weapon Settings")]
     [SerializeField] private WeaponScriptable equippedWeapon;
@@ -90,7 +93,7 @@ public class WeaponData : MonoBehaviour
 
             if(time <= 0)
             {
-                damageUI.text = "";
+               // damageUI.text = "";
             }
         }
 
@@ -159,13 +162,14 @@ public class WeaponData : MonoBehaviour
 
         lockTime = Time.time + intervaltime;
 
-
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
+        Debug.Log(transform.localRotation);
         equippedWeapon.shootingEffect.Play();
         Vector3 direction = getSpreadDir();
-        GetCameraRecoil();
-        GetGunRecoilAnimation();
-        GunRecoilApplied();
-        PlayFireSound();
+        //GetCameraRecoil();
+        //GetGunRecoilAnimation();
+        //GunRecoilApplied();
+        //PlayFireSound();
 
 
         if (Physics.Raycast(cameraTransform.position, direction, out RaycastHit hit))
@@ -179,11 +183,11 @@ public class WeaponData : MonoBehaviour
 
             ammo -= 1;
 
-            Debug.Log("DANNO INFLITTO:" + equippedWeapon.damage);
 
             IDamageable iDamageable = hit.collider.GetComponent<IDamageable>();
             if (iDamageable != null)
             {
+                Debug.Log("DANNO INFLITTO:" + equippedWeapon.damage);
                 //time = displayTime;
                 //damageUI.text = equippedWeapon.damage.ToString();
                 //damageUI.color = Color.yellow;
@@ -277,7 +281,7 @@ public class WeaponData : MonoBehaviour
 
 
 
-        kickbackDir += new Vector3(0, 0, -equippedWeapon.kickback);
+        //kickbackDir += new Vector3(0, 0, -equippedWeapon.kickback);
         
 
 
@@ -298,16 +302,16 @@ public class WeaponData : MonoBehaviour
 
         //kickback
 
-        // Gestisci il ritorno della kickback
-        kickbackDir = Vector3.Slerp(kickbackDir, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackReturnSpeed);
-        kickbackTarget = Vector3.Lerp(kickbackTarget, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackReturnSpeed);
+        //// Gestisci il ritorno della kickback
+        //kickbackDir = Vector3.Slerp(kickbackDir, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackReturnSpeed);
+        //kickbackTarget = Vector3.Lerp(kickbackTarget, Vector3.zero, Time.deltaTime * equippedWeapon.kickbackReturnSpeed);
 
 
 
-        // Sposta l'arma lungo l'asse Z per il kickback
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, kickbackTarget.z);
+        //// Sposta l'arma lungo l'asse Z per il kickback
+        //transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, kickbackTarget.z);
 
-        kickbackTarget = Vector3.Lerp(kickbackTarget, kickbackDir, Time.deltaTime * equippedWeapon.kickbackSnappiness);
+        //kickbackTarget = Vector3.Lerp(kickbackTarget, kickbackDir, Time.deltaTime * equippedWeapon.kickbackSnappiness);
 
 
     }
